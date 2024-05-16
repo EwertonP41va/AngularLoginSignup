@@ -18,11 +18,17 @@ export class LoginComponent {
 
   signUpObj: SignUpModel  = new SignUpModel();
   loginObj: LoginModel  = new LoginModel();
+  signUpError?: string;
+  loginError?: string;
 
   constructor(private router: Router){}
 
 
   onRegister() {
+    if (!this.signUpObj.email || !this.signUpObj.password || !this.signUpObj.name) {
+      this.signUpError = 'Todos os campos são obrigatórios';
+      return;
+    }
     debugger;
     const localUser = localStorage.getItem('angular17users');
     if(localUser != null) {
@@ -34,10 +40,15 @@ export class LoginComponent {
       users.push(this.signUpObj);
       localStorage.setItem('angular17users', JSON.stringify(users))
     }
-    alert('Registration Success')
+    alert('Registration Success');
+    this.router.navigateByUrl('/dashboard');
   }
 
   onLogin() {
+    if (!this.loginObj.email || !this.loginObj.password) {
+      this.loginError = 'Email e senha são obrigatórios';
+      return;
+    }
     debugger;
     const localUsers =  localStorage.getItem('angular17users');
     if(localUsers != null) {
@@ -49,7 +60,7 @@ export class LoginComponent {
         localStorage.setItem('loggedUser', JSON.stringify(isUserPresent));
         this.router.navigateByUrl('/dashboard');
       } else {
-        alert("No User Found")
+        alert("No User Found");
       }
     }
   }
